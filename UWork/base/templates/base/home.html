@@ -1,0 +1,111 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Project Silesia | Night Briefing{% endblock %}
+
+{% block content %}
+<section class="hero-banner">
+    <div class="hero-copy">
+        <p class="kicker">Unofficial briefing</p>
+        <h1>PROJECT<br>SILESIA</h1>
+        <p class="lede">
+            A one-night call to the brave. Loud energy, warehouse mood, and a cinematic house-party pulse inspired by chaotic coming-of-age party films.
+        </p>
+        <div class="hero-tags">
+            <span>Private party</span>
+            <span>Silesia district</span>
+            <span>Entry by confirmation</span>
+            <span>20 zl cash</span>
+            <span>BYOB</span>
+        </div>
+    </div>
+    <div class="hero-card">
+        <p class="card-label">Mission tone</p>
+        <h2>No boring flyer. No generic club page. This is the banner before the night begins.</h2>
+        <p>
+            Project Silesia is framed like an event dossier: dramatic, secretive, and built to feel like the first poster you see before everything gets louder.
+        </p>
+    </div>
+</section>
+
+<section class="detail-grid">
+    <article class="panel panel-accent">
+        <p class="panel-label">Night code</p>
+        <h2>Rules of the house</h2>
+        <ul class="rules-list">
+            {% for rule in rules %}
+            <li>{{ rule }}</li>
+            {% endfor %}
+        </ul>
+    </article>
+
+    <article class="panel">
+        <p class="panel-label">Start time</p>
+        <div class="moments">
+            <div class="moment-row">
+                <span>Starts</span>
+                <strong>{{ start_time }}</strong>
+            </div>
+        </div>
+        <p class="panel-note">
+            Address: {{ location }}. There is no bar on site, so bring your own alcohol and keep the route home sorted before the night starts.
+        </p>
+    </article>
+
+    <article class="panel wide-panel">
+        <p class="panel-label">Party vibe</p>
+        <h2>Just a crazy night with the right people.</h2>
+        <div class="signal-list">
+            {% for signal in signals %}
+            <span>{{ signal }}</span>
+            {% endfor %}
+        </div>
+        <p class="panel-note">
+            This is not a formal event and not some polished club promo. It is a wild party page made to feel direct, loud, and ready for the night.
+        </p>
+    </article>
+ </section>
+
+<section class="detail-grid booking-grid">
+    <article class="panel panel-accent">
+        <p class="panel-label">Reserve a spot</p>
+        <h2>Book your place without login.</h2>
+        <p class="panel-note">
+            Leave your name and number and we will keep your place on the list.
+        </p>
+        {% if messages %}
+            {% for message in messages %}
+            <div class="message-box">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        <form method="post" class="booking-form">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-row">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                <div class="form-error">{{ field.errors|join:", " }}</div>
+                {% endif %}
+            </div>
+            {% endfor %}
+            <button type="submit" class="booking-button">Send booking request</button>
+        </form>
+    </article>
+
+    <article class="panel">
+        <p class="panel-label">Booking note</p>
+        <h2>Quick entry request, no account, no extra steps.</h2>
+        <p class="panel-note">
+            Once someone sends their request, you can handle the guest list privately from your side without exposing any management details on the page.
+        </p>
+    </article>
+</section>
+
+<section class="closing-banner">
+    <p class="closing-label">Final reminder</p>
+    <h2>Come ready. Stay sharp. Leave with your whole crew.</h2>
+    <p>
+        Project Silesia starts like a rumor and ends like a story. If you are on the list, you already know enough.
+    </p>
+</section>
+{% endblock %}

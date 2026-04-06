@@ -1,0 +1,111 @@
+{% extends 'base/base.html' %}
+
+{% block title %}uwork | Tasks{% endblock %}
+{% block body_class %}body-app{% endblock %}
+{% block shell_class %}page-shell-app{% endblock %}
+
+{% block header %}
+        <header class="app-header">
+            <div class="app-header-left">
+                <a class="brand brand-compact" href="{% url 'home' %}">
+                    <span class="brand-mark" aria-hidden="true">
+                        <span></span>
+                        <span></span>
+                    </span>
+                    <span class="brand-copy">
+                        <strong>uwork</strong>
+                        <small>company tasks</small>
+                    </span>
+                </a>
+                <p class="app-header-note">Real tasks from partners</p>
+            </div>
+            <nav class="app-nav" aria-label="Tasks navigation">
+                <a href="{% url 'dashboard' %}">Dashboard</a>
+                <a href="{% url 'play_zone' %}">Play Zone</a>
+                <a href="{% url 'path' %}">Path</a>
+                <a class="active" href="{% url 'tasks' %}">Tasks</a>
+            </nav>
+            <form action="{% url 'logout' %}" method="post" class="logout-form">
+                {% csrf_token %}
+                <button type="submit" class="login-chip login-chip-button">Logout</button>
+            </form>
+        </header>
+{% endblock %}
+
+{% block content %}
+        <section class="hero hero-path">
+            <p class="eyebrow">Company task board</p>
+            <h1>{{ first_name }}, here are the tasks your progress can unlock.</h1>
+            <p class="hero-copy">
+                This page represents the core idea of uwork: students move from learning into real company work,
+                one task at a time. As learners progress through the platform, this board updates automatically
+                with more available company opportunities.
+            </p>
+        </section>
+
+        <section class="section">
+            <div class="section-heading">
+                <p class="eyebrow">Available now</p>
+                <h2>Tasks from companies, with visible points and payment.</h2>
+            </div>
+            <div class="task-board-summary">
+                <article class="summary-chip">
+                    <span>{{ task_board|length }}</span>
+                    <p>partner tasks listed</p>
+                </article>
+                <article class="summary-chip">
+                    <span>{{ progress.tasks_unlocked }}</span>
+                    <p>task levels opened</p>
+                </article>
+                <article class="summary-chip">
+                    <span>{{ progress.impact_points }}</span>
+                    <p>impact points earned</p>
+                </article>
+            </div>
+            <div class="task-board">
+                {% for task in task_board %}
+                <article class="task-card {% if task.unlocked %}task-card-open{% else %}task-card-locked{% endif %}">
+                    <div class="card-head">
+                        <div>
+                            <p class="panel-label">{{ task.category }}</p>
+                            <h3>{{ task.title }}</h3>
+                        </div>
+                        <span class="status-pill">{{ task.status }}</span>
+                    </div>
+                    <p class="task-company">{{ task.company }}</p>
+                    <p>{{ task.description }}</p>
+                    <div class="task-meta">
+                        <span>{{ task.points }} pts</span>
+                        <span>{{ task.payment }}</span>
+                        <span>{{ task.pace }}</span>
+                        <span>Needs {{ task.required_unlocks }} unlock{{ task.required_unlocks|pluralize }}</span>
+                    </div>
+                    <div class="task-actions">
+                        {% if task.unlocked %}
+                        <a class="button button-primary button-small" href="{% url 'task_detail' task.slug %}">Open now</a>
+                        {% else %}
+                        <span class="button button-muted button-small">Locked</span>
+                        {% endif %}
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section class="section highlight">
+            <div class="section-heading">
+                <p class="eyebrow">Your current access</p>
+                <h2>What your progress means right now.</h2>
+            </div>
+            <div class="two-column">
+                <article class="panel">
+                    <h3>Unlocked company tasks</h3>
+                    <p>You currently have {{ progress.tasks_unlocked }} unlocked task level{{ progress.tasks_unlocked|pluralize }} available to explore.</p>
+                </article>
+                <article class="panel">
+                    <h3>Next unlock</h3>
+                    <p>Finish {{ next_task_in }} more learning session{{ next_task_in|pluralize }} to open more company tasks and rewards.</p>
+                </article>
+            </div>
+        </section>
+{% endblock %}

@@ -1,0 +1,105 @@
+{% extends 'base/base.html' %}
+
+{% block title %}uwork | Learning Path{% endblock %}
+{% block body_class %}body-app{% endblock %}
+{% block shell_class %}page-shell-app{% endblock %}
+
+{% block header %}
+        <header class="app-header">
+            <div class="app-header-left">
+                <a class="brand brand-compact" href="{% url 'home' %}">
+                    <span class="brand-mark" aria-hidden="true">
+                        <span></span>
+                        <span></span>
+                    </span>
+                    <span class="brand-copy">
+                        <strong>uwork</strong>
+                        <small>path view</small>
+                    </span>
+                </a>
+                <p class="app-header-note">Learning to work route</p>
+            </div>
+            <nav class="app-nav" aria-label="Path navigation">
+                <a href="{% url 'dashboard' %}">Dashboard</a>
+                <a href="{% url 'play_zone' %}">Play Zone</a>
+                <a class="active" href="{% url 'path' %}">Path</a>
+                <a href="{% url 'tasks' %}">Tasks</a>
+            </nav>
+            <form action="{% url 'logout' %}" method="post" class="logout-form">
+                {% csrf_token %}
+                <button type="submit" class="login-chip login-chip-button">Logout</button>
+            </form>
+        </header>
+{% endblock %}
+
+{% block content %}
+        <section class="hero hero-path">
+            <p class="eyebrow">Learning + work path</p>
+            <h1>From first session to first real opportunity.</h1>
+            <p class="hero-copy">
+                This page explains the value of uwork in the clearest way possible: students start small,
+                build proof, and gradually move into real projects, internships, and work access.
+            </p>
+            <div class="hero-actions">
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="complete_session">
+                    <button type="submit" class="button button-primary">Advance one step</button>
+                </form>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-heading">
+                <p class="eyebrow">Pathway</p>
+                <h2>A staged system for motivation, growth, and employability.</h2>
+            </div>
+            <div class="path-line">
+                <article class="path-step {% if progress.sessions_completed >= 0 %}path-step-active{% endif %}">
+                    <span>01</span>
+                    <h3>Start learning</h3>
+                    <p>Users join a field, complete short sessions, and begin collecting visible progress.</p>
+                </article>
+                <article class="path-step {% if progress.sessions_completed >= 3 %}path-step-active{% endif %}">
+                    <span>02</span>
+                    <h3>Build practical skill</h3>
+                    <p>Assignments become more real, more collaborative, and closer to workplace tasks.</p>
+                </article>
+                <article class="path-step {% if progress.sessions_completed >= 6 %}path-step-active{% endif %}">
+                    <span>03</span>
+                    <h3>Create proof</h3>
+                    <p>Projects, badges, streaks, and completed work make learner growth easy to show.</p>
+                </article>
+                <article class="path-step {% if progress.sessions_completed >= 9 %}path-step-active{% endif %}">
+                    <span>04</span>
+                    <h3>Unlock opportunities</h3>
+                    <p>Students move into microtasks, internships, hybrid work, and income opportunities.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="section highlight">
+            <div class="section-heading">
+                <p class="eyebrow">Why it works</p>
+                <h2>It solves motivation and employability at the same time.</h2>
+            </div>
+            <div class="two-column">
+                <article class="panel">
+                    <h3>For students</h3>
+                    <p>You have completed {{ progress.sessions_completed }} session{{ progress.sessions_completed|pluralize }}, which keeps your journey moving forward in real time.</p>
+                </article>
+                <article class="panel">
+                    <h3>For universities</h3>
+                    <p>Programs can be customized to match courses, skill goals, and employer expectations.</p>
+                </article>
+                <article class="panel">
+                    <h3>For employers</h3>
+                    <p>You already have {{ progress.tasks_unlocked }} unlocked task{{ progress.tasks_unlocked|pluralize }} as proof that the path can lead into work.</p>
+                </article>
+                <article class="panel">
+                    <h3>For society</h3>
+                    <p>{{ progress.trees_planted }} planted tree{{ progress.trees_planted|pluralize }} and {{ progress.impact_points }} impact points show visible social value.</p>
+                </article>
+            </div>
+        </section>
+{% endblock %}

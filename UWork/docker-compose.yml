@@ -1,0 +1,19 @@
+services:
+  web:
+    build: .
+    container_name: project-silesia-web
+    ports:
+      - "8000:8000"
+    environment:
+      DJANGO_DEBUG: "False"
+      DJANGO_ALLOWED_HOSTS: "localhost,127.0.0.1"
+      DJANGO_SECRET_KEY: "change-me-before-public-deploy"
+      SQLITE_PATH: "/app/data/db.sqlite3"
+      DJANGO_SUPERUSER_USERNAME: "admin"
+      DJANGO_SUPERUSER_PASSWORD: "Mawi0101pl"
+      DJANGO_SUPERUSER_EMAIL: "admin@projectsilesia.local"
+    volumes:
+      - sqlite_data:/app/data
+
+volumes:
+  sqlite_data:

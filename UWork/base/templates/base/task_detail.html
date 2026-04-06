@@ -1,0 +1,72 @@
+{% extends 'base/base.html' %}
+
+{% block title %}uwork | {{ task.title }}{% endblock %}
+{% block body_class %}body-app{% endblock %}
+{% block shell_class %}page-shell-app{% endblock %}
+
+{% block header %}
+        <header class="app-header">
+            <div class="app-header-left">
+                <a class="brand brand-compact" href="{% url 'home' %}">
+                    <span class="brand-mark" aria-hidden="true">
+                        <span></span>
+                        <span></span>
+                    </span>
+                    <span class="brand-copy">
+                        <strong>uwork</strong>
+                        <small>task detail</small>
+                    </span>
+                </a>
+                <p class="app-header-note">Partner opportunity view</p>
+            </div>
+            <nav class="app-nav" aria-label="Task detail navigation">
+                <a href="{% url 'dashboard' %}">Dashboard</a>
+                <a href="{% url 'play_zone' %}">Play Zone</a>
+                <a href="{% url 'path' %}">Path</a>
+                <a class="active" href="{% url 'tasks' %}">Tasks</a>
+            </nav>
+            <form action="{% url 'logout' %}" method="post" class="logout-form">
+                {% csrf_token %}
+                <button type="submit" class="login-chip login-chip-button">Logout</button>
+            </form>
+        </header>
+{% endblock %}
+
+{% block content %}
+        <section class="hero hero-path">
+            <p class="eyebrow">{{ task.category }}</p>
+            <h1>{{ task.title }}</h1>
+            <p class="hero-copy">
+                {{ task.company }} is offering this task through the uwork opportunity board.
+                It is designed as a beginner-friendly real work experience connected to your learning progress.
+            </p>
+        </section>
+
+        <section class="section">
+            <div class="task-detail-grid">
+                <article class="task-detail-main">
+                    <p class="panel-label">Task overview</p>
+                    <h2>{{ task.company }}</h2>
+                    <p>{{ task.details }}</p>
+                    <div class="task-meta">
+                        <span>{{ task.points }} pts</span>
+                        <span>{{ task.payment }}</span>
+                        <span>{{ task.pace }}</span>
+                        <span>{{ task.status }}</span>
+                    </div>
+                </article>
+                <aside class="task-detail-side">
+                    <article class="task-detail-card">
+                        <p class="panel-label">Requirements</p>
+                        <h3>Access level</h3>
+                        <p>This task needs {{ task.required_unlocks }} unlock{{ task.required_unlocks|pluralize }}. Your current level: {{ progress.tasks_unlocked }}.</p>
+                    </article>
+                    <article class="task-detail-card">
+                        <p class="panel-label">Why it matters</p>
+                        <h3>Real experience</h3>
+                        <p>This kind of work gives learners portfolio proof, confidence, and a first step toward paid opportunities.</p>
+                    </article>
+                </aside>
+            </div>
+        </section>
+{% endblock %}

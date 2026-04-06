@@ -1,0 +1,46 @@
+{% extends 'base/base.html' %}
+
+{% block title %}uwork | Register{% endblock %}
+
+{% block content %}
+        <section class="auth-shell">
+            <div class="auth-panel">
+                <p class="eyebrow">Student registration</p>
+                <h1>Create your student uwork profile.</h1>
+                <p class="hero-copy">
+                    Register with your university email to explore the platform, save your progress,
+                    and move from learning into real opportunities.
+                </p>
+            </div>
+            <div class="auth-form-card">
+                <div class="auth-note">
+                    <strong>University email required</strong>
+                    <p>Only students using a valid university email can create a uwork account.</p>
+                </div>
+                <form method="post" class="auth-form">
+                    {% csrf_token %}
+                    {% if form.non_field_errors %}
+                    <div class="form-errors">
+                        {% for error in form.non_field_errors %}
+                        <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    {% for field in form %}
+                    <div class="field-group">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.help_text %}
+                        <small class="field-help">{{ field.help_text|safe }}</small>
+                        {% endif %}
+                        {% for error in field.errors %}
+                        <small class="field-error">{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                    {% endfor %}
+                    <button type="submit" class="button button-primary auth-submit">Register</button>
+                </form>
+                <p class="auth-switch">Only university emails are accepted. Already registered? <a href="{% url 'login' %}">Login here</a></p>
+            </div>
+        </section>
+{% endblock %}
