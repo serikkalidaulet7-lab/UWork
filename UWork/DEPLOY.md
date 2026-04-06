@@ -47,6 +47,8 @@ This repository is deployed from the repo root.
 - `DJANGO_DEBUG=False`
 - Optional for persistent SQLite path: `SQLITE_PATH=/app/data/db.sqlite3`
 
+You can set `DJANGO_ALLOWED_HOSTS=*` for the first Railway test deploy, or explicitly set your Railway public domain there.
+
 If you want the admin user to be created automatically, also set:
 
 - `DJANGO_SUPERUSER_USERNAME`
@@ -58,3 +60,5 @@ If you want the admin user to be created automatically, also set:
 If you keep SQLite in production, attach a Railway Volume and mount it to `/app/data`.
 
 Without a volume, SQLite data will be lost on redeploy.
+
+The app now creates the SQLite directory automatically on startup, but the data is still ephemeral unless a Volume is attached.
