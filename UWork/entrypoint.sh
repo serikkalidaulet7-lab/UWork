@@ -1,14 +1,20 @@
 #!/bin/sh
 set -e
 
+echo "Starting Django entrypoint..."
+
 if [ -n "$SQLITE_PATH" ]; then
+echo "Ensuring SQLite directory exists at $(dirname "$SQLITE_PATH")"
 mkdir -p "$(dirname "$SQLITE_PATH")"
 fi
 
+echo "Running database migrations..."
 python manage.py migrate --noinput
+echo "Collecting static files..."
 python manage.py collectstatic --noinput
 
 if [ -n "$DJANGO_SUPERUSER_USERNAME" ] && [ -n "$DJANGO_SUPERUSER_PASSWORD" ]; then
+echo "Ensuring Django superuser exists..."
 python manage.py shell -c "
 from django.contrib.auth import get_user_model
 User = get_user_model()
@@ -25,4 +31,5 @@ print('superuser ready')
 "
 fi
 
+echo "Launching application on port ${PORT:-8000}..."
 exec "$@"

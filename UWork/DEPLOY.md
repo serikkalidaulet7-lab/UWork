@@ -39,6 +39,7 @@ This repository is deployed from the repo root.
 
 - In Railway, create a service from the GitHub repository.
 - Railway will detect the root `Dockerfile` automatically.
+- Healthcheck is configured on `/health/`.
 
 ## 2. Set required variables
 
