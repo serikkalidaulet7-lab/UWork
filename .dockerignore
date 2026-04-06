@@ -1,0 +1,7 @@
+.git
+.DS_Store
+venv
+UWork/db.sqlite3
+UWork/**/__pycache__
+UWork/**/*.pyc
+UWork/staticfiles
