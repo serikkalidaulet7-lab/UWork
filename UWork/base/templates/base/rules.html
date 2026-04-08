@@ -1,0 +1,45 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Project Silesia | Main Rules{% endblock %}
+
+{% block content %}
+<section class="hero-banner rules-hero">
+    <div class="hero-copy">
+        <p class="kicker">House protocol</p>
+        <h1>MAIN<br>RULES</h1>
+        <p class="lede">
+            Before anyone steps inside, these rules need to be clear. Respect the place, respect the people, and keep the night under control.
+        </p>
+        <div class="hero-actions">
+            <a href="{% url 'home' %}" class="hero-button hero-button-secondary">Back to home</a>
+        </div>
+    </div>
+    <div class="hero-card">
+        <p class="card-label">Strict policy</p>
+        <h2>No chaos, no damage, no excuses.</h2>
+        <p>
+            If someone breaks the rules, they are out. The point is a strong night, not a messy one.
+        </p>
+    </div>
+</section>
+
+<section class="detail-grid">
+    <article class="panel panel-accent wide-panel">
+        <p class="panel-label">Main rules</p>
+        <h2>Read them once. Respect them all night.</h2>
+        <ul class="rules-list">
+            {% for rule in main_rules %}
+            <li>{{ rule }}</li>
+            {% endfor %}
+        </ul>
+    </article>
+</section>
+
+<section class="closing-banner">
+    <p class="closing-label">Final reminder</p>
+    <h2>Respect the space or lose the invite.</h2>
+    <p>
+        Good energy stays. Fighting, damage, illegal substances, and reckless behavior do not.
+    </p>
+</section>
+{% endblock %}

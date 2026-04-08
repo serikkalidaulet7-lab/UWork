@@ -137,11 +137,40 @@ h2 {
 }
 
 .hero-tags,
-.signal-list {
+.signal-list,
+.hero-actions {
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem;
     margin-top: 1.75rem;
+}
+
+.hero-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 3.2rem;
+    padding: 0.9rem 1.4rem;
+    border: 1px solid rgba(255, 176, 103, 0.24);
+    border-radius: 999px;
+    background: linear-gradient(135deg, rgba(255, 61, 46, 0.22), rgba(255, 106, 26, 0.18));
+    color: var(--text);
+    font-size: 0.9rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+}
+
+.hero-button:hover {
+    transform: translateY(-1px);
+    border-color: rgba(255, 176, 103, 0.44);
+    box-shadow: 0 18px 40px rgba(255, 61, 46, 0.18);
+}
+
+.hero-button-secondary {
+    background: rgba(255, 255, 255, 0.05);
 }
 
 .booking-grid {
@@ -171,6 +200,10 @@ h2 {
 .hero-card {
     padding: 1.5rem;
     background: var(--panel-strong);
+}
+
+.rules-hero {
+    min-height: auto;
 }
 
 .hero-copy {
@@ -411,7 +444,8 @@ h2 {
     }
 
     .hero-tags span,
-    .signal-list span {
+    .signal-list span,
+    .hero-button {
         width: 100%;
         text-align: center;
         padding: 0.9rem 0.95rem;
