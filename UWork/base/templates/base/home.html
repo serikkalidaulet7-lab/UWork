@@ -3,75 +3,157 @@
 {% block title %}Project Silesia | Night Briefing{% endblock %}
 
 {% block content %}
-<section class="hero-banner">
+<section class="hero-banner hero-banner-home">
+    <div class="light-orb light-orb-left" aria-hidden="true"></div>
+    <div class="light-orb light-orb-right" aria-hidden="true"></div>
+    <div class="party-sticker party-sticker-top">Tonight only</div>
+    <div class="party-sticker party-sticker-side">Invite only</div>
     <div class="hero-copy">
-        <p class="kicker">Unofficial briefing</p>
+        <div class="hero-eyebrow-row">
+            <p class="kicker">Unofficial briefing</p>
+            <span class="eyebrow-pill">Private location</span>
+        </div>
         <h1>PROJECT<br>SILESIA</h1>
         <p class="lede">
-            A one-night call to the brave. Loud energy, warehouse mood, and a cinematic house-party pulse inspired by chaotic coming-of-age party films.
+            A one-night call to the brave. Warehouse tension, late-night heat, and a party page built to feel like the flyer everyone screenshots and sends around first.
         </p>
+        <div class="hero-actions">
+            <a href="#reserve" class="hero-button">Reserve your spot</a>
+            <a href="{% url 'rules' %}" class="hero-button hero-button-secondary">Read the rules</a>
+        </div>
         <div class="hero-tags">
             <span>Private party</span>
             <span>Silesia district</span>
             <span>Entry by confirmation</span>
             <span>20 zl cash</span>
-            <span>BYOB</span>
         </div>
-        <div class="hero-actions">
-            <a href="{% url 'rules' %}" class="hero-button">Read the rules</a>
+        <div class="hero-quickfacts">
+            <article class="quickfact-card">
+                <p>Starts</p>
+                <strong>{{ start_time }}</strong>
+            </article>
+            <article class="quickfact-card">
+                <p>Zone</p>
+                <strong>Gilowice</strong>
+            </article>
+            <article class="quickfact-card">
+                <p>Entry</p>
+                <strong>Confirmation only</strong>
+            </article>
         </div>
     </div>
-    <div class="hero-card">
-        <p class="card-label">Mission tone</p>
-        <h2>No boring flyer. No generic club page. This is the banner before the night begins.</h2>
-        <p>
-            Project Silesia is framed like an event dossier: dramatic, secretive, and built to feel like the first poster you see before everything gets louder.
-        </p>
+    <div class="poster-column">
+        <article class="poster-card poster-card-main">
+            <p class="card-label">Night signal</p>
+            <h2>Not a safe little club page. A proper midnight mood.</h2>
+            <p>
+                Built like an underground event poster: cinematic, loud, and sharp enough to feel special before the doors even open.
+            </p>
+            <div class="hero-meter">
+                <span>Party energy</span>
+                <strong>All night</strong>
+            </div>
+        </article>
+        <article class="poster-card poster-card-tilt">
+            <p class="card-label">Atmosphere</p>
+            <ul class="poster-points">
+                {% for signal in signals %}
+                <li>{{ signal }}</li>
+                {% endfor %}
+            </ul>
+        </article>
+        <article class="poster-card poster-card-ticket">
+            <p class="card-label">Address note</p>
+            <p class="ticket-location">{{ location }}</p>
+            <p class="ticket-copy">Bring your people, bring your bottle, and plan your ride home before the night gets blurry.</p>
+        </article>
     </div>
 </section>
 
-<section class="detail-grid">
-    <article class="panel panel-accent">
+<section class="marquee-strip" aria-label="Event highlights">
+    <div class="marquee-track">
+        <span>PROJECT SILESIA</span>
+        <span>PRIVATE NIGHT</span>
+        <span>BYOB</span>
+        <span>20 ZL ENTRY</span>
+        <span>INVITE ONLY</span>
+        <span>PROJECT SILESIA</span>
+        <span>PRIVATE NIGHT</span>
+        <span>BYOB</span>
+        <span>20 ZL ENTRY</span>
+        <span>INVITE ONLY</span>
+    </div>
+</section>
+
+<section class="feature-grid">
+    <article class="panel panel-accent manifesto-panel">
         <p class="panel-label">Night code</p>
-        <h2>Rules of the house</h2>
+        <h2>Rules first. Chaos second.</h2>
+        <p class="panel-note">
+            The energy can be wild. The behavior still has to stay clean, respectful, and under control.
+        </p>
         <ul class="rules-list">
-            {% for rule in rules %}
+            {% for rule in main_rules %}
             <li>{{ rule }}</li>
             {% endfor %}
         </ul>
+        <a href="{% url 'rules' %}" class="text-link">See the full rules</a>
     </article>
 
-    <article class="panel">
-        <p class="panel-label">Start time</p>
-        <div class="moments">
-            <div class="moment-row">
-                <span>Starts</span>
+    <article class="panel info-stack">
+        <p class="panel-label">Arrival sheet</p>
+        <h2>Everything important in one glance.</h2>
+        <div class="info-grid">
+            <div class="info-chip">
+                <span>Doors</span>
                 <strong>{{ start_time }}</strong>
+            </div>
+            <div class="info-chip">
+                <span>Cash</span>
+                <strong>20 zl</strong>
+            </div>
+            <div class="info-chip">
+                <span>Bar</span>
+                <strong>No bar</strong>
+            </div>
+            <div class="info-chip">
+                <span>Drink</span>
+                <strong>Bring your own</strong>
             </div>
         </div>
         <p class="panel-note">
-            Address: {{ location }}. There is no bar on site, so bring your own alcohol and keep the route home sorted before the night starts.
+            Address: {{ location }}. Keep the place private, respect the neighbors, and come ready rather than confused.
+        </p>
+    </article>
+</section>
+
+<section class="detail-grid">
+    <article class="panel">
+        <p class="panel-label">Mission tone</p>
+        <h2>Crazy enough to feel legendary. Clean enough to still look beautiful.</h2>
+        <p class="panel-note">
+            This is not polished corporate nightlife. It is deliberate, raw, warm, and built around the feeling of the right people in the right place at the right hour.
         </p>
     </article>
 
-    <article class="panel wide-panel">
-        <p class="panel-label">Party vibe</p>
-        <h2>Just a crazy night with the right people.</h2>
+    <article class="panel panel-accent">
+        <p class="panel-label">Guest energy</p>
+        <h2>Bring heat, not problems.</h2>
         <div class="signal-list">
             {% for signal in signals %}
             <span>{{ signal }}</span>
             {% endfor %}
         </div>
         <p class="panel-note">
-            This is not a formal event and not some polished club promo. It is a wild party page made to feel direct, loud, and ready for the night.
+            Good energy multiplies fast. Drama does too. Pick one.
         </p>
     </article>
- </section>
+</section>
 
-<section class="detail-grid booking-grid">
-    <article class="panel panel-accent">
+<section class="booking-stage" id="reserve">
+    <article class="panel panel-accent booking-panel">
         <p class="panel-label">Reserve a spot</p>
-        <h2>Book your place without login.</h2>
+        <h2>Claim your place before the night fills up.</h2>
         <p class="panel-note">
             Leave your name and number and we will keep your place on the list.
         </p>
@@ -95,13 +177,25 @@
         </form>
     </article>
 
-    <article class="panel">
-        <p class="panel-label">Booking note</p>
-        <h2>Quick entry request, no account, no extra steps.</h2>
-        <p class="panel-note">
-            Once someone sends their request, you can handle the guest list privately from your side without exposing any management details on the page.
-        </p>
-    </article>
+    <aside class="booking-sidebar">
+        <article class="sidebar-card">
+            <p class="panel-label">Before you come</p>
+            <h2>Simple night plan.</h2>
+            <ul class="sidebar-list">
+                <li>Bring your own alcohol.</li>
+                <li>Keep location details private.</li>
+                <li>Come with people you trust.</li>
+                <li>Sort your ride home in advance.</li>
+            </ul>
+        </article>
+        <article class="sidebar-card sidebar-card-glow">
+            <p class="panel-label">Guest note</p>
+            <h2>No login. No friction. Just send the request.</h2>
+            <p class="panel-note">
+                Once someone sends their request, you can handle the guest list privately without exposing any management details on the page.
+            </p>
+        </article>
+    </aside>
 </section>
 
 <section class="closing-banner">
@@ -110,5 +204,10 @@
     <p>
         Project Silesia starts like a rumor and ends like a story. If you are on the list, you already know enough.
     </p>
+    <div class="closing-tags">
+        <span>Private location</span>
+        <span>Respect the house</span>
+        <span>Make it unforgettable</span>
+    </div>
 </section>
 {% endblock %}
