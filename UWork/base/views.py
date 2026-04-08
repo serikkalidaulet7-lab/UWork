@@ -53,7 +53,7 @@ def home(request):
             "Loud music and night atmosphere",
             "Simple rules, good people, hard vibes",
         ],
-        "location": "Zabrze",
+        "location": "Poland, Zabrze",
         "form": form,
     }
     return render(request, "base/home.html", context)
