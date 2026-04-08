@@ -36,6 +36,11 @@ if railway_public_domain:
 elif running_on_railway:
     # Allow Railway-generated public subdomains during first deploys.
     allowed_hosts.add('.up.railway.app')
+    allowed_hosts.add('healthcheck.railway.app')
+    allowed_hosts.add('.railway.internal')
+
+# Railway deployment healthchecks use this hostname.
+allowed_hosts.add('healthcheck.railway.app')
 
 ALLOWED_HOSTS = ['*'] if '*' in allowed_hosts else sorted(allowed_hosts)
 
