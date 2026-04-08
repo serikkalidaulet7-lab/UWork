@@ -44,9 +44,28 @@ allowed_hosts.add('healthcheck.railway.app')
 
 ALLOWED_HOSTS = ['*'] if '*' in allowed_hosts else sorted(allowed_hosts)
 
-CSRF_TRUSTED_ORIGINS = []
+raw_csrf_trusted_origins = os.environ.get('DJANGO_CSRF_TRUSTED_ORIGINS', '').strip()
+csrf_trusted_origins = {
+    origin.strip()
+    for origin in raw_csrf_trusted_origins.split(',')
+    if origin.strip()
+}
+
 if railway_public_domain:
-    CSRF_TRUSTED_ORIGINS.append(f'https://{railway_public_domain}')
+    csrf_trusted_origins.add(f'https://{railway_public_domain}')
+elif running_on_railway:
+    csrf_trusted_origins.add('https://*.up.railway.app')
+
+for host in allowed_hosts:
+    if host in {'*', 'healthcheck.railway.app'} or host.startswith('.'):
+        continue
+    if '://' in host:
+        csrf_trusted_origins.add(host)
+    else:
+        csrf_trusted_origins.add(f'https://{host}')
+
+CSRF_TRUSTED_ORIGINS = sorted(csrf_trusted_origins)
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
 # Application definition
