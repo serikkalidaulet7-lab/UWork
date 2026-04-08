@@ -20,13 +20,6 @@ class BookingReservationForm(forms.ModelForm):
             "required": "Enter your phone number.",
         },
     )
-    responsibility_confirmation = forms.BooleanField(
-        label="I confirm that I am 18+ and accept full responsibility.",
-        required=True,
-        error_messages={
-            "required": "You must confirm that you are 18+ and accept full responsibility.",
-        },
-    )
 
     class Meta:
         model = BookingReservation

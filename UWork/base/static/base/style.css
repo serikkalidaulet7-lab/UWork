@@ -67,21 +67,6 @@ body::before {
     padding: 1.2rem 0 3rem;
 }
 
-.checkbox-label {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.8rem;
-    margin-top: 1.3rem;
-    color: var(--text);
-    line-height: 1.6;
-}
-
-.checkbox-label input {
-    margin: 0.2rem 0 0;
-    accent-color: var(--accent);
-    transform: scale(1.15);
-}
-
 .hero-banner,
 .marquee-strip,
 .feature-grid,
@@ -676,23 +661,6 @@ h2 {
     text-transform: uppercase;
 }
 
-.form-row-checkbox {
-    margin-top: 1.2rem;
-}
-
-.form-row-checkbox .checkbox-label {
-    margin-top: 0;
-}
-
-.form-row-checkbox .checkbox-label span {
-    color: var(--text);
-    font-size: 0.94rem;
-    font-weight: 600;
-    letter-spacing: 0;
-    line-height: 1.65;
-    text-transform: none;
-}
-
 .form-row input,
 .form-row textarea {
     width: 100%;
@@ -1203,8 +1171,7 @@ h2 {
         padding: 0.75rem;
     }
 
-    .site-gate-copy,
-    .form-row-checkbox .checkbox-label span {
+    .site-gate-copy {
         font-size: 0.92rem;
         line-height: 1.6;
     }
