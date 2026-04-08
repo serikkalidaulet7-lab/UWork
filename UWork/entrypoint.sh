@@ -13,22 +13,30 @@ python manage.py migrate --noinput
 echo "Collecting static files..."
 python manage.py collectstatic --noinput
 
-if [ -n "$DJANGO_SUPERUSER_USERNAME" ] && [ -n "$DJANGO_SUPERUSER_PASSWORD" ]; then
+if [ -n "$DJANGO_SUPERUSER_PASSWORD" ]; then
 echo "Ensuring Django superuser exists..."
 python manage.py shell -c "
 import os
 from django.contrib.auth import get_user_model
 User = get_user_model()
-username = os.environ['DJANGO_SUPERUSER_USERNAME']
+username = os.environ.get('DJANGO_SUPERUSER_USERNAME', 'admin').strip() or 'admin'
 password = os.environ['DJANGO_SUPERUSER_PASSWORD']
-email = os.environ.get('DJANGO_SUPERUSER_EMAIL', 'admin@example.com')
-user, created = User.objects.get_or_create(username=username, defaults={'email': email, 'is_staff': True, 'is_superuser': True})
+email = os.environ.get('DJANGO_SUPERUSER_EMAIL', 'admin@example.com').strip() or 'admin@example.com'
+
+user = User.objects.filter(username=username).first()
+if user is None and email:
+    user = User.objects.filter(email=email).first()
+
+if user is None:
+    user = User(username=username)
+
+user.username = username
 user.email = email
 user.is_staff = True
 user.is_superuser = True
 user.set_password(password)
 user.save()
-print('superuser ready')
+print(f'superuser ready: {username}')
 "
 fi
 
