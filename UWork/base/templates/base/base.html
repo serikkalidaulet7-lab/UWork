@@ -4,16 +4,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Project Silesia{% endblock %}</title>
+    <title>{% block title %}{{ event.name }}{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}A polished Django event booking app for a design, product, and engineering summit.{% endblock %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'base/style.css' %}">
 </head>
 <body>
-    <div class="page-noise" aria-hidden="true"></div>
-    <main class="page-shell">
+    <div class="background-veil" aria-hidden="true"></div>
+    <div class="background-orb background-orb-left" aria-hidden="true"></div>
+    <div class="background-orb background-orb-right" aria-hidden="true"></div>
+    <main class="site-shell">
+        <header class="site-header section-card">
+            <a href="{% url 'home' %}" class="brand">
+                <span class="brand-mark">UW</span>
+                <span class="brand-copy">
+                    <strong>{{ event.brand }}</strong>
+                    <small>{{ event.tagline_short }}</small>
+                </span>
+            </a>
+
+            <nav class="site-nav" aria-label="Primary">
+                <a href="{% url 'home' %}"{% if request.resolver_match.url_name == "home" %} class="is-active"{% endif %}>Overview</a>
+                <a href="{% url 'agenda' %}"{% if request.resolver_match.url_name == "agenda" %} class="is-active"{% endif %}>Agenda</a>
+                <a href="{% url 'guide' %}"{% if request.resolver_match.url_name == "guide" %} class="is-active"{% endif %}>Attendee guide</a>
+            </nav>
+
+            <a href="{% url 'home' %}#apply" class="button button-secondary button-small">Request a seat</a>
+        </header>
+
+        {% if messages %}
+        <section class="toast-stack" aria-label="Notifications">
+            {% for message in messages %}
+            <div class="toast-message">{{ message }}</div>
+            {% endfor %}
+        </section>
+        {% endif %}
+
         {% block content %}{% endblock %}
+        <footer class="site-footer">
+            <p>{{ event.name }}. Built as a polished Django event booking experience with admin-ready application handling.</p>
+            <p>{{ event.date }} · {{ event.city }} · {{ event.venue_note }}</p>
+        </footer>
     </main>
 </body>
 </html>

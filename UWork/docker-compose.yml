@@ -1,17 +1,18 @@
 services:
   web:
     build: .
-    container_name: project-silesia-web
+    container_name: uwork-future-ready-web
     ports:
       - "8000:8000"
     environment:
-      DJANGO_DEBUG: "False"
-      DJANGO_ALLOWED_HOSTS: "*"
-      DJANGO_SECRET_KEY: "change-me-before-public-deploy"
-      SQLITE_PATH: "/app/data/db.sqlite3"
-      DJANGO_SUPERUSER_USERNAME: "admin"
-      DJANGO_SUPERUSER_PASSWORD: "Mawi0101pl"
-      DJANGO_SUPERUSER_EMAIL: "admin@projectsilesia.local"
+      DJANGO_ENV: "${DJANGO_ENV:-development}"
+      DJANGO_DEBUG: "${DJANGO_DEBUG:-True}"
+      DJANGO_ALLOWED_HOSTS: "${DJANGO_ALLOWED_HOSTS:-127.0.0.1,localhost}"
+      DJANGO_SECRET_KEY: "${DJANGO_SECRET_KEY:-dev-only-secret-key-not-for-production}"
+      SQLITE_PATH: "${SQLITE_PATH:-/app/data/db.sqlite3}"
+      DJANGO_SUPERUSER_USERNAME: "${DJANGO_SUPERUSER_USERNAME:-}"
+      DJANGO_SUPERUSER_PASSWORD: "${DJANGO_SUPERUSER_PASSWORD:-}"
+      DJANGO_SUPERUSER_EMAIL: "${DJANGO_SUPERUSER_EMAIL:-}"
     volumes:
       - sqlite_data:/app/data
     healthcheck:

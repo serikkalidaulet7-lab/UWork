@@ -1,5 +1,8 @@
+import importlib.util
 import os
 from pathlib import Path
+
+from django.core.exceptions import ImproperlyConfigured
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -8,11 +11,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
+DJANGO_ENV = os.environ.get("DJANGO_ENV", "development").lower()
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-5ry=4l3%_l)l$530lk(5c0a!gnd(ukdz+^tl$remll(xv(#=34')
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
+if not SECRET_KEY:
+    if DJANGO_ENV == "production":
+        raise ImproperlyConfigured("DJANGO_SECRET_KEY must be set in production.")
+    SECRET_KEY = "dev-only-secret-key-not-for-production"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DJANGO_DEBUG', 'False').lower() in {'1', 'true', 'yes', 'on'}
+DEBUG = os.environ.get(
+    "DJANGO_DEBUG",
+    "True" if DJANGO_ENV != "production" else "False",
+).lower() in {"1", "true", "yes", "on"}
 
 raw_allowed_hosts = os.environ.get('DJANGO_ALLOWED_HOSTS', '').strip()
 
@@ -23,7 +35,7 @@ if raw_allowed_hosts:
         if host.strip()
     }
 else:
-    allowed_hosts = {'localhost', '127.0.0.1'}
+    allowed_hosts = {"localhost", "127.0.0.1"}
 
 railway_public_domain = os.environ.get('RAILWAY_PUBLIC_DOMAIN', '').strip()
 running_on_railway = any(
@@ -36,13 +48,16 @@ if railway_public_domain:
 elif running_on_railway:
     # Allow Railway-generated public subdomains during first deploys.
     allowed_hosts.add('.up.railway.app')
-    allowed_hosts.add('healthcheck.railway.app')
+    allowed_hosts.add("healthcheck.railway.app")
     allowed_hosts.add('.railway.internal')
 
 # Railway deployment healthchecks use this hostname.
 allowed_hosts.add('healthcheck.railway.app')
 
-ALLOWED_HOSTS = ['*'] if '*' in allowed_hosts else sorted(allowed_hosts)
+if DEBUG:
+    allowed_hosts.add("0.0.0.0")
+
+ALLOWED_HOSTS = ["*"] if "*" in allowed_hosts else sorted(allowed_hosts)
 
 raw_csrf_trusted_origins = os.environ.get('DJANGO_CSRF_TRUSTED_ORIGINS', '').strip()
 csrf_trusted_origins = {
@@ -65,7 +80,12 @@ for host in allowed_hosts:
         csrf_trusted_origins.add(f'https://{host}')
 
 CSRF_TRUSTED_ORIGINS = sorted(csrf_trusted_origins)
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+SESSION_COOKIE_SECURE = DJANGO_ENV == "production"
+CSRF_COOKIE_SECURE = DJANGO_ENV == "production"
+SECURE_HSTS_SECONDS = 31536000 if DJANGO_ENV == "production" else 0
+SECURE_HSTS_INCLUDE_SUBDOMAINS = DJANGO_ENV == "production"
+SECURE_HSTS_PRELOAD = DJANGO_ENV == "production"
 
 
 # Application definition
@@ -80,9 +100,10 @@ INSTALLED_APPS = [
     'base',
 ]
 
+whitenoise_installed = importlib.util.find_spec("whitenoise") is not None
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -90,6 +111,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+if whitenoise_installed:
+    MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
 
 ROOT_URLCONF = 'UWork.urls'
 
@@ -158,4 +182,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = (
+    'whitenoise.storage.CompressedManifestStaticFilesStorage'
+    if whitenoise_installed
+    else 'django.contrib.staticfiles.storage.StaticFilesStorage'
+)

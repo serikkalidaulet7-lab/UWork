@@ -1,0 +1,82 @@
+{% extends 'base/base.html' %}
+
+{% block title %}{{ event.name }} | Agenda{% endblock %}
+
+{% block content %}
+<section class="section-card hero-grid hero-section hero-section-compact">
+    <div class="hero-copy">
+        <p class="eyebrow">Agenda</p>
+        <h1>One focused day. No filler.</h1>
+        <p class="hero-lead">The agenda is structured to alternate between input, critique, and action so the event feels useful from the first hour.</p>
+        <p class="hero-support">
+            Sessions run from {{ event.start_time }} to {{ event.closing_time }}, with track choices and mentor time built into the middle of the day.
+        </p>
+        <div class="action-row">
+            <a href="{% url 'home' %}#apply" class="button button-primary">Apply now</a>
+            <a href="{% url 'guide' %}" class="button button-secondary">Read attendee guide</a>
+        </div>
+    </div>
+
+    <aside class="hero-panel">
+        <div class="section-heading">
+            <p class="eyebrow">Program format</p>
+            <h2>Built to keep energy high.</h2>
+        </div>
+        <ul class="plain-list compact-list">
+            <li>Main-stage keynote to align the room early</li>
+            <li>Two breakout rounds for track-specific depth</li>
+            <li>Mentor lunch and reviews while decisions can still change</li>
+            <li>Closing showcase to leave with contacts and next steps</li>
+        </ul>
+    </aside>
+</section>
+
+<section class="section-card">
+    <div class="section-heading">
+        <p class="eyebrow">Full schedule</p>
+        <h2>The summit timeline.</h2>
+    </div>
+    <div class="timeline-list">
+        {% for item in agenda_items %}
+        <article class="timeline-row">
+            <div class="timeline-stamp">
+                <span>{{ item.time }}</span>
+            </div>
+            <div class="timeline-content">
+                <div class="timeline-head">
+                    <h3>{{ item.title }}</h3>
+                    <span>{{ item.format }}</span>
+                </div>
+                <p>{{ item.description }}</p>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="section-grid">
+    {% for track in tracks %}
+    <article class="section-card{% if forloop.counter|divisibleby:2 %} accent-card{% endif %}">
+        <div class="section-heading">
+            <p class="eyebrow">Track {{ forloop.counter }}</p>
+            <h2>{{ track.title }}</h2>
+            <p>{{ track.summary }}</p>
+        </div>
+        <ul class="plain-list">
+            {% for point in track.points %}
+            <li>{{ point }}</li>
+            {% endfor %}
+        </ul>
+    </article>
+    {% endfor %}
+</section>
+
+<section class="section-card accent-card cta-card">
+    <div class="section-heading">
+        <p class="eyebrow">Next step</p>
+        <h2>If the format fits, apply while seats are still open.</h2>
+        <p>{{ snapshot.availability_note }}</p>
+    </div>
+    <a href="{% url 'home' %}#apply" class="button button-primary">Request a seat</a>
+</section>
+{% endblock %}

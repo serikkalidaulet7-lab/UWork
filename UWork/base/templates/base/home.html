@@ -1,213 +1,246 @@
 {% extends 'base/base.html' %}
 
-{% block title %}Project Silesia | Night Briefing{% endblock %}
+{% block title %}{{ event.name }} | Overview{% endblock %}
 
 {% block content %}
-<section class="hero-banner hero-banner-home">
-    <div class="light-orb light-orb-left" aria-hidden="true"></div>
-    <div class="light-orb light-orb-right" aria-hidden="true"></div>
-    <div class="party-sticker party-sticker-top">Tonight only</div>
-    <div class="party-sticker party-sticker-side">Invite only</div>
+<section class="section-card hero-grid hero-section">
     <div class="hero-copy">
-        <div class="hero-eyebrow-row">
-            <p class="kicker">Unofficial briefing</p>
-            <span class="eyebrow-pill">Private location</span>
-        </div>
-        <h1>PROJECT<br>SILESIA</h1>
-        <p class="lede">
-            A one-night call to the brave. Warehouse tension, late-night heat, and a party page built to feel like the flyer everyone screenshots and sends around first.
+        <p class="eyebrow">Portfolio-ready event platform</p>
+        <h1>{{ event.name }}</h1>
+        <p class="hero-lead">{{ event.tagline }}</p>
+        <p class="hero-support">
+            {{ event.date }} in {{ event.city }}. A one-day program built for people who want clearer proof of skill, stronger career direction,
+            and better conversations with the teams they want to join.
         </p>
-        <div class="hero-actions">
-            <a href="#reserve" class="hero-button">Reserve your spot</a>
-            <a href="{% url 'rules' %}" class="hero-button hero-button-secondary">Read the rules</a>
+        <div class="action-row">
+            <a href="#apply" class="button button-primary">Request a seat</a>
+            <a href="{% url 'agenda' %}" class="button button-secondary">Browse agenda</a>
         </div>
-        <div class="hero-tags">
-            <span>Private party</span>
-            <span>Silesia district</span>
-            <span>Entry by confirmation</span>
-            <span>20 zl cash</span>
-        </div>
-        <div class="hero-quickfacts">
-            <article class="quickfact-card">
-                <p>Starts</p>
-                <strong>{{ start_time }}</strong>
-            </article>
-            <article class="quickfact-card">
-                <p>Zone</p>
-                <strong>Zabrze</strong>
-            </article>
-            <article class="quickfact-card">
-                <p>Entry</p>
-                <strong>Confirmation only</strong>
-            </article>
+        <div class="pill-row">
+            <span>{{ event.date_short }}</span>
+            <span>{{ event.city }}</span>
+            <span>{{ event.tracks_label }}</span>
+            <span>Application review workflow</span>
         </div>
     </div>
-    <div class="poster-column">
-        <article class="poster-card poster-card-main">
-            <p class="card-label">Night signal</p>
-            <h2>Not a safe little club page. A proper midnight mood.</h2>
+
+    <aside class="hero-panel">
+        <div class="section-heading">
+            <p class="eyebrow">Event snapshot</p>
+            <h2>Clear value, clear capacity.</h2>
+        </div>
+        <div class="metric-grid">
+            {% for metric in hero_metrics %}
+            <article class="metric-card">
+                <p>{{ metric.label }}</p>
+                <strong>{{ metric.value }}</strong>
+            </article>
+            {% endfor %}
+        </div>
+        <div class="status-panel">
+            <p class="status-label">{{ snapshot.availability_label }}</p>
+            <strong>{{ snapshot.remaining_seats }} seats currently open</strong>
+            <p>{{ snapshot.availability_note }}</p>
+        </div>
+        <ul class="plain-list compact-list">
+            <li>Applications reviewed within {{ event.response_window }}</li>
+            <li>Exact venue shared only with approved attendees</li>
+            <li>Small-group sessions across design, engineering, and career strategy</li>
+        </ul>
+    </aside>
+</section>
+
+<section class="section-grid">
+    <article class="section-card">
+        <div class="section-heading">
+            <p class="eyebrow">Why it works</p>
+            <h2>A tighter format than a typical conference landing page.</h2>
             <p>
-                Built like an underground event poster: cinematic, loud, and sharp enough to feel special before the doors even open.
+                The product story is simple: focused sessions, intentional attendee mix, and a booking flow that feels credible from the first click.
             </p>
-            <div class="hero-meter">
-                <span>Party energy</span>
-                <strong>All night</strong>
-            </div>
+        </div>
+        <div class="highlight-grid">
+            {% for item in home_highlights %}
+            <article class="highlight-card">
+                <h3>{{ item.title }}</h3>
+                <p>{{ item.copy }}</p>
+            </article>
+            {% endfor %}
+        </div>
+    </article>
+
+    <article class="section-card accent-card">
+        <div class="section-heading">
+            <p class="eyebrow">Tracks</p>
+            <h2>Three ways into the day.</h2>
+            <p>Each track speaks to a different stage of the transition from learning to visible professional proof.</p>
+        </div>
+        <div class="track-stack">
+            {% for track in tracks %}
+            <article class="track-card">
+                <div class="track-topline">
+                    <h3>{{ track.title }}</h3>
+                    <span>{{ track.format }}</span>
+                </div>
+                <p>{{ track.summary }}</p>
+                <ul class="plain-list">
+                    {% for point in track.points %}
+                    <li>{{ point }}</li>
+                    {% endfor %}
+                </ul>
+            </article>
+            {% endfor %}
+        </div>
+    </article>
+</section>
+
+<section class="section-card">
+    <div class="section-heading split-heading">
+        <div>
+            <p class="eyebrow">Agenda preview</p>
+            <h2>A day that keeps moving.</h2>
+        </div>
+        <a href="{% url 'agenda' %}" class="text-link">View full agenda</a>
+    </div>
+    <div class="timeline-preview">
+        {% for item in agenda_preview %}
+        <article class="timeline-card">
+            <p class="timeline-time">{{ item.time }}</p>
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.description }}</p>
+            <span>{{ item.format }}</span>
         </article>
-        <article class="poster-card poster-card-tilt">
-            <p class="card-label">Atmosphere</p>
-            <ul class="poster-points">
-                {% for signal in signals %}
-                <li>{{ signal }}</li>
-                {% endfor %}
-            </ul>
-        </article>
-        <article class="poster-card poster-card-ticket">
-            <p class="card-label">Address note</p>
-            <p class="ticket-location">{{ location }}</p>
-            <p class="ticket-copy">Bring your people, bring your bottle, and plan your ride home before the night gets blurry.</p>
-        </article>
+        {% endfor %}
     </div>
 </section>
 
-<section class="marquee-strip" aria-label="Event highlights">
-    <div class="marquee-track">
-        <span>PROJECT SILESIA</span>
-        <span>PRIVATE NIGHT</span>
-        <span>BYOB</span>
-        <span>20 ZL ENTRY</span>
-        <span>INVITE ONLY</span>
-        <span>PROJECT SILESIA</span>
-        <span>PRIVATE NIGHT</span>
-        <span>BYOB</span>
-        <span>20 ZL ENTRY</span>
-        <span>INVITE ONLY</span>
-    </div>
-</section>
-
-<section class="feature-grid">
-    <article class="panel panel-accent manifesto-panel">
-        <p class="panel-label">Night code</p>
-        <h2>Rules first. Chaos second.</h2>
-        <p class="panel-note">
-            The energy can be wild. The behavior still has to stay clean, respectful, and under control.
-        </p>
-        <ul class="rules-list">
-            {% for rule in main_rules %}
-            <li>{{ rule }}</li>
+<section class="section-grid">
+    <article class="section-card accent-card">
+        <div class="section-heading">
+            <p class="eyebrow">Outcomes</p>
+            <h2>People should leave with proof, not just inspiration.</h2>
+        </div>
+        <ul class="plain-list spacious-list">
+            {% for outcome in outcomes %}
+            <li>{{ outcome }}</li>
             {% endfor %}
         </ul>
-        <a href="{% url 'rules' %}" class="text-link">See the full rules</a>
     </article>
 
-    <article class="panel info-stack">
-        <p class="panel-label">Arrival sheet</p>
-        <h2>Everything important in one glance.</h2>
-        <div class="info-grid">
-            <div class="info-chip">
-                <span>Doors</span>
-                <strong>{{ start_time }}</strong>
-            </div>
-            <div class="info-chip">
-                <span>Cash</span>
-                <strong>20 zl</strong>
-            </div>
-            <div class="info-chip">
-                <span>Bar</span>
-                <strong>No bar</strong>
-            </div>
-            <div class="info-chip">
-                <span>Drink</span>
-                <strong>Bring your own</strong>
-            </div>
+    <article class="section-card">
+        <div class="section-heading">
+            <p class="eyebrow">Capacity design</p>
+            <h2>Admin-friendly application handling.</h2>
+            <p>
+                Requests stay lightweight for attendees while the underlying data model supports reference codes, status handling, and waitlist logic.
+            </p>
         </div>
-        <p class="panel-note">
-            Address: {{ location }}. Keep the place private, respect the neighbors, and come ready rather than confused.
-        </p>
+        <div class="mini-metrics">
+            <article>
+                <strong>{{ snapshot.pending_review_count }}</strong>
+                <span>Pending review</span>
+            </article>
+            <article>
+                <strong>{{ snapshot.confirmed_count }}</strong>
+                <span>Confirmed</span>
+            </article>
+            <article>
+                <strong>{{ snapshot.waitlist_count }}</strong>
+                <span>Waitlist</span>
+            </article>
+        </div>
     </article>
 </section>
 
-<section class="detail-grid">
-    <article class="panel">
-        <p class="panel-label">Mission tone</p>
-        <h2>Crazy enough to feel legendary. Clean enough to still look beautiful.</h2>
-        <p class="panel-note">
-            This is not polished corporate nightlife. It is deliberate, raw, warm, and built around the feeling of the right people in the right place at the right hour.
-        </p>
-    </article>
-
-    <article class="panel panel-accent">
-        <p class="panel-label">Guest energy</p>
-        <h2>Bring heat, not problems.</h2>
-        <div class="signal-list">
-            {% for signal in signals %}
-            <span>{{ signal }}</span>
-            {% endfor %}
+<section class="section-grid application-layout" id="apply">
+    <article class="section-card">
+        <div class="section-heading">
+            <p class="eyebrow">Application</p>
+            <h2>Request your seat.</h2>
+            <p>A compact form with enough detail to review fit, seat count, and attendee goals without creating friction.</p>
         </div>
-        <p class="panel-note">
-            Good energy multiplies fast. Drama does too. Pick one.
-        </p>
-    </article>
-</section>
-
-<section class="booking-stage" id="reserve">
-    <article class="panel panel-accent booking-panel">
-        <p class="panel-label">Reserve a spot</p>
-        <h2>Claim your place before the night fills up.</h2>
-        <p class="panel-note">
-            Leave your name and number and we will keep your place on the list.
-        </p>
-        {% if messages %}
-            {% for message in messages %}
-            <div class="message-box">{{ message }}</div>
-            {% endfor %}
-        {% endif %}
-        <form method="post" class="booking-form">
+        <form method="post" class="application-form" novalidate>
             {% csrf_token %}
+            {% if form.non_field_errors %}
+            <div class="field-error-group">
+                {% for error in form.non_field_errors %}
+                <p class="field-error">{{ error }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
             {% for field in form %}
-            <div class="form-row">
+            <div class="form-field">
                 <label for="{{ field.id_for_label }}">{{ field.label }}</label>
                 {{ field }}
+                {% if field.help_text %}
+                <p class="field-help">{{ field.help_text }}</p>
+                {% endif %}
                 {% if field.errors %}
-                <div class="form-error">{{ field.errors|join:", " }}</div>
+                {% for error in field.errors %}
+                <p class="field-error">{{ error }}</p>
+                {% endfor %}
                 {% endif %}
             </div>
             {% endfor %}
-            <button type="submit" class="booking-button">Send booking request</button>
+            <button type="submit" class="button button-primary button-block">Submit application</button>
         </form>
     </article>
 
-    <aside class="booking-sidebar">
-        <article class="sidebar-card">
-            <p class="panel-label">Before you come</p>
-            <h2>Simple night plan.</h2>
-            <ul class="sidebar-list">
-                <li>Bring your own alcohol.</li>
-                <li>Keep location details private.</li>
-                <li>Come with people you trust.</li>
-                <li>Sort your ride home in advance.</li>
-            </ul>
+    <aside class="side-stack">
+        <article class="section-card accent-card compact-card">
+            <div class="section-heading">
+                <p class="eyebrow">Review flow</p>
+                <h2>What happens next.</h2>
+            </div>
+            <ol class="step-list">
+                {% for step in review_flow %}
+                <li>{{ step }}</li>
+                {% endfor %}
+            </ol>
         </article>
-        <article class="sidebar-card sidebar-card-glow">
-            <p class="panel-label">Guest note</p>
-            <h2>No login. No friction. Just send the request.</h2>
-            <p class="panel-note">
-                Once someone sends their request, you can handle the guest list privately without exposing any management details on the page.
-            </p>
+
+        <article class="section-card compact-card">
+            <div class="section-heading">
+                <p class="eyebrow">Before you apply</p>
+                <h2>Quick details.</h2>
+            </div>
+            <dl class="detail-list">
+                <div>
+                    <dt>Application deadline</dt>
+                    <dd>{{ event.application_deadline }}</dd>
+                </div>
+                <div>
+                    <dt>Response time</dt>
+                    <dd>{{ event.response_window }}</dd>
+                </div>
+                <div>
+                    <dt>Public venue info</dt>
+                    <dd>{{ event.city }}</dd>
+                </div>
+                <div>
+                    <dt>Private venue note</dt>
+                    <dd>{{ event.venue_note }}</dd>
+                </div>
+            </dl>
         </article>
     </aside>
 </section>
 
-<section class="closing-banner">
-    <p class="closing-label">Final reminder</p>
-    <h2>Come ready. Stay sharp. Leave with your whole crew.</h2>
-    <p>
-        Project Silesia starts like a rumor and ends like a story. If you are on the list, you already know enough.
-    </p>
-    <div class="closing-tags">
-        <span>Private location</span>
-        <span>Respect the house</span>
-        <span>Make it unforgettable</span>
+<section class="section-card">
+    <div class="section-heading split-heading">
+        <div>
+            <p class="eyebrow">FAQ</p>
+            <h2>Questions people usually ask before applying.</h2>
+        </div>
+        <a href="{% url 'guide' %}" class="text-link">See attendee guide</a>
+    </div>
+    <div class="faq-grid">
+        {% for item in faq_items %}
+        <details class="faq-item"{% if forloop.first %} open{% endif %}>
+            <summary>{{ item.question }}</summary>
+            <p>{{ item.answer }}</p>
+        </details>
+        {% endfor %}
     </div>
 </section>
 {% endblock %}

@@ -1,0 +1,101 @@
+{% extends 'base/base.html' %}
+
+{% block title %}{{ event.name }} | Attendee Guide{% endblock %}
+
+{% block content %}
+<section class="section-card hero-grid hero-section hero-section-compact">
+    <div class="hero-copy">
+        <p class="eyebrow">Attendee guide</p>
+        <h1>Clear expectations make better rooms.</h1>
+        <p class="hero-lead">
+            The event works best when everyone understands the application flow, the venue process, and the standard for how people show up.
+        </p>
+        <p class="hero-support">
+            This page keeps the public information high signal while protecting the exact venue details until applications are approved.
+        </p>
+        <div class="action-row">
+            <a href="{% url 'home' %}#apply" class="button button-primary">Start application</a>
+            <a href="{% url 'agenda' %}" class="button button-secondary">View agenda</a>
+        </div>
+    </div>
+
+    <aside class="hero-panel">
+        <div class="section-heading">
+            <p class="eyebrow">Public details</p>
+            <h2>What we share upfront.</h2>
+        </div>
+        <dl class="detail-list">
+            <div>
+                <dt>Date</dt>
+                <dd>{{ event.date }}</dd>
+            </div>
+            <div>
+                <dt>City</dt>
+                <dd>{{ event.city }}</dd>
+            </div>
+            <div>
+                <dt>Venue policy</dt>
+                <dd>{{ event.venue_note }}</dd>
+            </div>
+            <div>
+                <dt>Response time</dt>
+                <dd>{{ event.response_window }}</dd>
+            </div>
+        </dl>
+    </aside>
+</section>
+
+<section class="section-grid">
+    <article class="section-card">
+        <div class="section-heading">
+            <p class="eyebrow">Application process</p>
+            <h2>How approval works.</h2>
+        </div>
+        <div class="step-grid">
+            {% for item in guide_steps %}
+            <article class="step-card">
+                <span>{{ forloop.counter|stringformat:"02d" }}</span>
+                <h3>{{ item.title }}</h3>
+                <p>{{ item.copy }}</p>
+            </article>
+            {% endfor %}
+        </div>
+    </article>
+
+    <article class="section-card accent-card">
+        <div class="section-heading">
+            <p class="eyebrow">Code of conduct</p>
+            <h2>The room should feel sharp, safe, and useful.</h2>
+        </div>
+        <ul class="plain-list spacious-list">
+            {% for item in policy_items %}
+            <li>{{ item }}</li>
+            {% endfor %}
+        </ul>
+    </article>
+</section>
+
+<section class="section-card">
+    <div class="section-heading">
+        <p class="eyebrow">FAQ</p>
+        <h2>Operational questions before the day.</h2>
+    </div>
+    <div class="faq-grid">
+        {% for item in faq_items %}
+        <details class="faq-item"{% if forloop.first %} open{% endif %}>
+            <summary>{{ item.question }}</summary>
+            <p>{{ item.answer }}</p>
+        </details>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="section-card cta-card">
+    <div class="section-heading">
+        <p class="eyebrow">Ready</p>
+        <h2>Request your place while review slots are still moving.</h2>
+        <p>{{ snapshot.availability_note }}</p>
+    </div>
+    <a href="{% url 'home' %}#apply" class="button button-primary">Apply for the summit</a>
+</section>
+{% endblock %}
